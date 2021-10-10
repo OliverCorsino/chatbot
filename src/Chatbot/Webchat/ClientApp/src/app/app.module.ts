@@ -10,6 +10,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { AuthService } from './services/auth.service';
 
 
 @NgModule({
@@ -28,7 +29,9 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
     RouterModule.forRoot(AppRoutes),
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

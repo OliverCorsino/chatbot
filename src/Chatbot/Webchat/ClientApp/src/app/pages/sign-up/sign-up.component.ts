@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { mustMatch } from '../../functions/passwordMatchValidator';
+import { SignUpRequest } from './../../models/sign-up-request';
+import { AuthService } from './../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -23,14 +26,29 @@ export class SignUpComponent implements OnInit {
   private readonly passwordRegex = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
 
   signUpForm!: FormGroup;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router) { }
 
   ngOnInit() {
     this.buildForm();
   }
 
   signUp(): void {
+    const signUpRequest = this.signUpForm.getRawValue() as SignUpRequest;
 
+    console.log(signUpRequest);
+
+    this.authService.signUp(signUpRequest).subscribe((result) => {
+      this.navigateToLogin();
+    }, (error) => {
+      console.log(error);
+    });
+  }
+
+  navigateToLogin(): void {
+    this.router.navigate(['']);
   }
 
   private buildForm(): void {
