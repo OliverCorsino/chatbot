@@ -1,10 +1,20 @@
+using Boundary.Persistence.Contexts;
+using Boundary.Persistence.Entities;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Webchat.Models;
+using Webchat.Validators;
 
 namespace Webchat
 {
@@ -26,6 +36,46 @@ namespace Webchat
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+
+            services.AddDbContext<DefaultDbContext>((options) =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultDbConnection"),
+                    (sqlServerDbContextOptionsBuilder) => sqlServerDbContextOptionsBuilder.MigrationsAssembly("Boundary.Persistence")));
+
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DefaultDbContext>();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddMvc().AddFluentValidation();
+
+            ConfigureJwt(services);
+            RegisterValidator(services);
+        }
+
+        private void ConfigureJwt(IServiceCollection services)
+        {
+            var jwtSettings = Configuration.GetSection("JwtSettings");
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = jwtSettings.GetSection("validIssuer").Value,
+                    ValidAudience = jwtSettings.GetSection("validAudience").Value,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
+                };
+            });
+        }
+
+        private void RegisterValidator(IServiceCollection services)
+        {
+            services.AddTransient<IValidator<SignUpRequest>, SignUpRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
