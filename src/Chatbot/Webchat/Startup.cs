@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Webchat.Helpers;
 using Webchat.Models;
 using Webchat.Validators;
 
@@ -48,6 +49,7 @@ namespace Webchat
 
             ConfigureJwt(services);
             RegisterValidator(services);
+            RegisterServicesScope(services);
         }
 
         private void ConfigureJwt(IServiceCollection services)
@@ -76,6 +78,12 @@ namespace Webchat
         private void RegisterValidator(IServiceCollection services)
         {
             services.AddTransient<IValidator<SignUpRequest>, SignUpRequestValidator>();
+            services.AddTransient<IValidator<AuthRequest>, SignInRequestValidator>();
+        }
+
+        private void RegisterServicesScope(IServiceCollection services)
+        {
+            services.AddScoped<JwtHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
