@@ -1,12 +1,10 @@
-import { NotificationService } from './../../services/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { mustMatch } from '../../functions/passwordMatchValidator';
 import { SignUpRequest } from './../../models/sign-up-request';
 import { AuthService } from './../../services/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-sign-up',
@@ -31,25 +29,20 @@ export class SignUpComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router,
-    private notificationService: NotificationService) { }
+    private router: Router) { }
 
   ngOnInit() {
     this.buildForm();
   }
 
   signUp(): void {
-    this.notificationService.showLoading();
     const signUpRequest = this.signUpForm.getRawValue() as SignUpRequest;
 
     this.authService.signUp(signUpRequest).subscribe(() => {
-      this.notificationService.hideLoading();
-      this.notificationService.showSuccessMessage('Sign up', 'Your account has been created successfully!');
       this.navigateToLogin();
+      console.log('Your account has been created successfully!');
     }, (error: HttpErrorResponse) => {
-      this.notificationService.hideLoading();
       console.log(error);
-      // this.notificationService.showErrorMessages(error.error.errors, 'Something went wrong!');
     });
   }
 

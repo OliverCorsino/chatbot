@@ -12,8 +12,7 @@ import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.
 import { HomeComponent } from './pages/home/home.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { AuthService } from './services/auth.service';
-import { NotificationService } from './services/notification.service';
-import { ToastrModule } from 'ngx-toastr';
+// import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
@@ -32,16 +31,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     BlockUIModule.forRoot(),
     BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      enableHtml: true,
-      closeButton: true,
-      progressBar: true,
-      preventDuplicates: true
-    }),
+    // ToastrModule.forRoot({
+    //   enableHtml: true,
+    //   closeButton: true,
+    //   progressBar: true,
+    //   preventDuplicates: true
+    // }),
   ],
   providers: [
-    AuthService,
-    NotificationService
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
