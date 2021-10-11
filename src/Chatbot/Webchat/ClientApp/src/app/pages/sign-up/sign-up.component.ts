@@ -1,9 +1,12 @@
+import { NotificationService } from './../../services/notification.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { mustMatch } from '../../functions/passwordMatchValidator';
 import { SignUpRequest } from './../../models/sign-up-request';
 import { AuthService } from './../../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-sign-up',
@@ -24,26 +27,29 @@ export class SignUpComponent implements OnInit {
    * @memberof SignUpComponent
    */
   private readonly passwordRegex = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
-
   signUpForm!: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router) { }
+    private router: Router,
+    private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.buildForm();
   }
 
   signUp(): void {
+    this.notificationService.showLoading();
     const signUpRequest = this.signUpForm.getRawValue() as SignUpRequest;
 
-    console.log(signUpRequest);
-
-    this.authService.signUp(signUpRequest).subscribe((result) => {
+    this.authService.signUp(signUpRequest).subscribe(() => {
+      this.notificationService.hideLoading();
+      this.notificationService.showSuccessMessage('Sign up', 'Your account has been created successfully!');
       this.navigateToLogin();
-    }, (error) => {
+    }, (error: HttpErrorResponse) => {
+      this.notificationService.hideLoading();
       console.log(error);
+      // this.notificationService.showErrorMessages(error.error.errors, 'Something went wrong!');
     });
   }
 

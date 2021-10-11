@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Boundary.Persistence.Entities;
-using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using Webchat.Models;
+using Webchat.Validators;
 
 namespace Webchat.Controllers
 {
@@ -18,6 +18,7 @@ namespace Webchat.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly SignUpRequestValidator _signUpRequestValidator = new SignUpRequestValidator();
 
         /// <summary>
         /// Initializes a new instance of <see cref="AuthController"/>.
@@ -38,14 +39,21 @@ namespace Webchat.Controllers
                 return BadRequest();
             }
 
+            var validationResult = await _signUpRequestValidator.ValidateAsync(signUpRequest);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             var user = _mapper.Map<User>(signUpRequest);
             var result = await _userManager.CreateAsync(user, signUpRequest.Password);
 
             if (!result.Succeeded)
             {
-                var message = result.Errors.First().Description;
+                var errorMessage = result.Errors.Select(e => e.Description);
 
-                return BadRequest(BasicOperationResult<User>.Fail(message));
+                return BadRequest(errorMessage);
             }
 
             return StatusCode(201);
