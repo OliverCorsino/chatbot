@@ -1,19 +1,23 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { JwtModule } from '@auth0/angular-jwt';
 import { BlockUIModule } from 'ng-block-ui';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { tokenGetter } from './functions/token-getter';
+import { AuthGuard } from './guards/auth.guard';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.component';
 import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
-import { AuthService } from './services/auth.service';
-// import { ToastrModule } from 'ngx-toastr';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TokenInterceptorService } from './services/token-interceptor.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +25,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AuthLayoutComponent,
     NavMenuComponent,
     HomeComponent,
-    SignUpComponent
+    SignUpComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -31,15 +36,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     BlockUIModule.forRoot(),
     BrowserAnimationsModule,
-    // ToastrModule.forRoot({
-    //   enableHtml: true,
-    //   closeButton: true,
-    //   progressBar: true,
-    //   preventDuplicates: true
-    // }),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    })
   ],
   providers: [
-    AuthService
+    AuthGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })
