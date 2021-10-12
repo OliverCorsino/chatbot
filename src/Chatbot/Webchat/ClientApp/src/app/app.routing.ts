@@ -15,6 +15,11 @@ export const AppRoutes: Routes = [
         path: '',
         canActivate: [AuthGuard],
         component: HomeComponent,
+      },
+      {
+        path: 'chatrooms/:chatroomId',
+        canActivate: [AuthGuard],
+        component: HomeComponent,
       }
     ]
   },

@@ -1,7 +1,7 @@
-﻿using System.Collections.Immutable;
-using System.Linq;
+﻿using Core.Contracts;
+using System.Collections.Immutable;
 
-namespace Core.Contracts
+namespace Core.Boundaries.Persistence
 {
     /// <summary>
     /// Represents the main operation the different repositories entity should do.
@@ -10,15 +10,10 @@ namespace Core.Contracts
     public interface IGenericRepository<T> where T : class
     {
         /// <summary>
-        /// Represents the entity.
-        /// </summary>
-        IQueryable<T> Table { get; }
-
-        /// <summary>
         /// Retrieves all the records from the database.
         /// </summary>
         /// <returns>An immutable list with the records found.</returns>
-        IImmutableList<T> GetAllAsync();
+        IImmutableList<T> GetAll();
 
         /// <summary>
         /// Inserts a new record to the database.

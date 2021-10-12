@@ -1,9 +1,9 @@
-﻿using Core.Contracts;
+﻿using Core.Boundaries.Persistence;
+using Core.Contracts;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace Boundary.Persistence.Repositories
 {
@@ -34,10 +34,7 @@ namespace Boundary.Persistence.Repositories
         }
 
         /// <inheritdoc />
-        public IQueryable<T> Table { get; }
-
-        /// <inheritdoc />
-        public IImmutableList<T> GetAllAsync() => Set.ToImmutableList();
+        public IImmutableList<T> GetAll() => Set.ToImmutableList();
 
         /// <inheritdoc />
         public IOperationResult<T> InsertAsync(T entity)
