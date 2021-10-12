@@ -8,9 +8,9 @@ namespace Boundary.Persistence.Configurations
     {
         void IEntityTypeConfiguration<User>.Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasOne<ChatRoom>(u => u.ChatRoom)
-                .WithMany(c => c.Users)
-                .HasForeignKey(u => u.ChatRoomId);
+            builder.HasOne<ChatRoom>(user => user.ChatRoom)
+                .WithMany(chatRoom => chatRoom.Users)
+                .HasForeignKey(user => user.ChatRoomId);
         }
     }
 }

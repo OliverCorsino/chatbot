@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Boundary.Persistence.Migrations
 {
-    public partial class InitialDB : Migration
+    public partial class Initial_DB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -74,7 +74,7 @@ namespace Boundary.Persistence.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    ChatRoomId = table.Column<Guid>(nullable: false)
+                    ChatRoomId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,7 +84,7 @@ namespace Boundary.Persistence.Migrations
                         column: x => x.ChatRoomId,
                         principalTable: "ChatRoom",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

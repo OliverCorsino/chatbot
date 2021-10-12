@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Boundary.Persistence.Migrations
 {
     [DbContext(typeof(DefaultDbContext))]
-    [Migration("20211012044537_InitialDB")]
-    partial class InitialDB
+    [Migration("20211012232423_Initial_DB")]
+    partial class Initial_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,7 @@ namespace Boundary.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ChatRoomId")
+                    b.Property<Guid?>("ChatRoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -271,9 +271,7 @@ namespace Boundary.Persistence.Migrations
                 {
                     b.HasOne("Core.Models.ChatRoom", "ChatRoom")
                         .WithMany("Users")
-                        .HasForeignKey("ChatRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChatRoomId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

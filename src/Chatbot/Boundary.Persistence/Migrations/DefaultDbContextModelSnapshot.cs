@@ -50,7 +50,7 @@ namespace Boundary.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ChatRoomId")
+                    b.Property<Guid?>("ChatRoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -269,9 +269,7 @@ namespace Boundary.Persistence.Migrations
                 {
                     b.HasOne("Core.Models.ChatRoom", "ChatRoom")
                         .WithMany("Users")
-                        .HasForeignKey("ChatRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ChatRoomId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

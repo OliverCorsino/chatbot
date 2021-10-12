@@ -11,7 +11,7 @@ namespace Core.Models
         /// <summary>
         /// Represents the navigation property for accessing to the associated data.
         /// </summary>
-        public Guid ChatRoomId { get; set; }
+        public Guid? ChatRoomId { get; set; }
 
         /// <summary>
         /// Represents the relationship between the <see cref="User"/> entity and <see cref="Models.ChatRoom"/> entity.

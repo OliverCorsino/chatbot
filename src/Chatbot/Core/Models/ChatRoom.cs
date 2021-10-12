@@ -24,7 +24,7 @@ namespace Core.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// Represents the relationship between the <see cref="User"/> entity and <see cref="ChatRoom"/> entity.
+        /// Represents the navigation property for accessing to the associated data.
         /// </summary>
         public ICollection<User> Users { get; set; }
     }
