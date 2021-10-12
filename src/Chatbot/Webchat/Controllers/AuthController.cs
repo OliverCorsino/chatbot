@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Boundary.Persistence.Entities;
+using Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

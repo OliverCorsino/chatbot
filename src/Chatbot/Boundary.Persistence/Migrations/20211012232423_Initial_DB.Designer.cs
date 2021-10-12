@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Boundary.Persistence.Migrations
 {
     [DbContext(typeof(DefaultDbContext))]
-    [Migration("20211010211749_InitialDb")]
-    partial class InitialDb
+    [Migration("20211012232423_Initial_DB")]
+    partial class Initial_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,29 @@ namespace Boundary.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Boundary.Persistence.Entities.User", b =>
+            modelBuilder.Entity("Core.Models.ChatRoom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChatRoom");
+                });
+
+            modelBuilder.Entity("Core.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(300)")
@@ -29,6 +51,9 @@ namespace Boundary.Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("ChatRoomId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -79,6 +104,8 @@ namespace Boundary.Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChatRoomId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -240,6 +267,13 @@ namespace Boundary.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Core.Models.User", b =>
+                {
+                    b.HasOne("Core.Models.ChatRoom", "ChatRoom")
+                        .WithMany("Users")
+                        .HasForeignKey("ChatRoomId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -251,7 +285,7 @@ namespace Boundary.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Boundary.Persistence.Entities.User", null)
+                    b.HasOne("Core.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -260,7 +294,7 @@ namespace Boundary.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Boundary.Persistence.Entities.User", null)
+                    b.HasOne("Core.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -275,7 +309,7 @@ namespace Boundary.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Boundary.Persistence.Entities.User", null)
+                    b.HasOne("Core.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -284,7 +318,7 @@ namespace Boundary.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Boundary.Persistence.Entities.User", null)
+                    b.HasOne("Core.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -1,5 +1,5 @@
 using Boundary.Persistence.Contexts;
-using Boundary.Persistence.Entities;
+using Core.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Boundary.Persistence.Repositories;
+using Core.Boundaries.Persistence;
+using Core.Rules;
 using Webchat.Helpers;
 using Webchat.Models;
 using Webchat.Validators;
@@ -50,6 +53,8 @@ namespace Webchat
             ConfigureJwt(services);
             RegisterValidator(services);
             RegisterServicesScope(services);
+            RegisterRepositoryScope(services);
+            RegisterRulesScope(services);
         }
 
         private void ConfigureJwt(IServiceCollection services)
@@ -81,10 +86,11 @@ namespace Webchat
             services.AddTransient<IValidator<AuthRequest>, SignInRequestValidator>();
         }
 
-        private void RegisterServicesScope(IServiceCollection services)
-        {
-            services.AddScoped<JwtHandler>();
-        }
+        private void RegisterServicesScope(IServiceCollection services) => services.AddScoped<JwtHandler>();
+
+        private void RegisterRepositoryScope(IServiceCollection services) => services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
+
+        private void RegisterRulesScope(IServiceCollection services) => services.AddScoped<ChatRoomRules>();
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

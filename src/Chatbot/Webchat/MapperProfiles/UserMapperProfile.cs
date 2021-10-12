@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Boundary.Persistence.Entities;
+using Core.Models;
 using Webchat.Models;
 
 namespace Webchat.MapperProfiles
