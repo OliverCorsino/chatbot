@@ -1,0 +1,18 @@
+.card {
+  width: 20vw !important;
+  max-height: 25vw !important;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .card {
+    width: 85vw !important;
+    max-height: 95vw !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .card {
+    width: 45vw !important;
+    max-height: 95vw !important;
+  }
+}

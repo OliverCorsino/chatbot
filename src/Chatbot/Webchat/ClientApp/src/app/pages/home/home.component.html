@@ -1,0 +1,15 @@
+<div class="row">
+  <h3>Chatrooms</h3>
+</div>
+<div class="alert alert-info" role="alert">
+  Select a chatroom and be part of the conversation!
+</div>
+<div class="row d-flex justify-content-between">
+  <div class="card mb-3" style="width: 15rem;" *ngFor="let chatRoom of chatRooms">
+    <div class="card-body">
+      <h5 class="card-title">{{ chatRoom.name }}</h5>
+      <p class="card-text">{{ chatRoom.description }}</p>
+      <a (click)="joinChatRoom(chatRoom.id)" class="btn btn-primary">Join the party!</a>
+    </div>
+  </div>
+</div>
