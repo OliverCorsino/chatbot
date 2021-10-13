@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webchat", "Webchat\Webchat.csproj", "{86D69858-D974-4F99-832B-1CA470A24CE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webchat", "Webchat\Webchat.csproj", "{86D69858-D974-4F99-832B-1CA470A24CE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{64BD42B0-B1A0-4B88-939C-16E1E6726480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{64BD42B0-B1A0-4B88-939C-16E1E6726480}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boundary.Persistence", "Boundary.Persistence\Boundary.Persistence.csproj", "{C976A871-B486-42F2-9677-9B0C874C023A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boundary.Persistence", "Boundary.Persistence\Boundary.Persistence.csproj", "{C976A871-B486-42F2-9677-9B0C874C023A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boundaries.MessengerService", "Boundaries.MessengerService\Boundaries.MessengerService.csproj", "{6E06F7AC-130E-4146-952D-4078EDD2C1F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{C976A871-B486-42F2-9677-9B0C874C023A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C976A871-B486-42F2-9677-9B0C874C023A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C976A871-B486-42F2-9677-9B0C874C023A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E06F7AC-130E-4146-952D-4078EDD2C1F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E06F7AC-130E-4146-952D-4078EDD2C1F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E06F7AC-130E-4146-952D-4078EDD2C1F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E06F7AC-130E-4146-952D-4078EDD2C1F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

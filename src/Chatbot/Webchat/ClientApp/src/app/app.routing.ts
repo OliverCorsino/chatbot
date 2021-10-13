@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { MessengerComponent } from './components/messenger/messenger.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.component';
@@ -17,9 +18,9 @@ export const AppRoutes: Routes = [
         component: HomeComponent,
       },
       {
-        path: 'chatrooms/:chatroomId',
+        path: 'chat-rooms/:chatroomId',
         canActivate: [AuthGuard],
-        component: HomeComponent,
+        component: MessengerComponent,
       }
     ]
   },

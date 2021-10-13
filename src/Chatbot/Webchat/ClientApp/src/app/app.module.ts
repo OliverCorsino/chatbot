@@ -8,6 +8,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { BlockUIModule } from 'ng-block-ui';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
+import { MessengerComponent } from './components/messenger/messenger.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { tokenGetter } from './functions/token-getter';
 import { AuthGuard } from './guards/auth.guard';
@@ -26,7 +27,8 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
     NavMenuComponent,
     HomeComponent,
     SignUpComponent,
-    LoginComponent
+    LoginComponent,
+    MessengerComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -37,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Boundaries.MessengerService\Boundaries.MessengerService.csproj" />
     <ProjectReference Include="..\Boundary.Persistence\Boundary.Persistence.csproj" />
   </ItemGroup>
 

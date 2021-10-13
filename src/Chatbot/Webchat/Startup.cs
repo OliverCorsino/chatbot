@@ -1,5 +1,11 @@
+using Boundaries.MessengerService.Handlers;
+using Boundaries.MessengerService.Hubs;
 using Boundary.Persistence.Contexts;
+using Boundary.Persistence.Repositories;
+using Core.Boundaries.MessengerService;
+using Core.Boundaries.Persistence;
 using Core.Models;
+using Core.Rules;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,10 +18,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
-using Boundary.Persistence.Repositories;
-using Core.Boundaries.Persistence;
-using Core.Rules;
+using ChatBot.Core;
 using Webchat.Helpers;
 using Webchat.Models;
 using Webchat.Validators;
@@ -49,12 +54,18 @@ namespace Webchat
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DefaultDbContext>();
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc().AddFluentValidation();
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.ClientTimeoutInterval = TimeSpan.FromMinutes(60);
+                hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(30);
+            }).AddJsonProtocol();
 
             ConfigureJwt(services);
             RegisterValidator(services);
             RegisterServicesScope(services);
             RegisterRepositoryScope(services);
             RegisterRulesScope(services);
+            ConfigureRabbitMq(services);
         }
 
         private void ConfigureJwt(IServiceCollection services)
@@ -86,11 +97,23 @@ namespace Webchat
             services.AddTransient<IValidator<AuthRequest>, SignInRequestValidator>();
         }
 
-        private void RegisterServicesScope(IServiceCollection services) => services.AddScoped<JwtHandler>();
+        private void RegisterServicesScope(IServiceCollection services)
+        {
+            services.AddScoped<JwtHandler>();
+
+            services.AddSingleton<IMessageDelivery, MessageDelivery>();
+            services.AddHostedService<MessageReceptor>();
+        }
 
         private void RegisterRepositoryScope(IServiceCollection services) => services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
 
         private void RegisterRulesScope(IServiceCollection services) => services.AddScoped<ChatRoomRules>();
+
+        private void ConfigureRabbitMq(IServiceCollection services)
+        {
+            var serviceClientSettingsConfig = Configuration.GetSection("RabbitMq");
+            services.Configure<RabbitMqConfiguration>(serviceClientSettingsConfig);
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -120,6 +143,8 @@ namespace Webchat
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapHub<MessengerHub>("hub/messenger");
             });
 
             app.UseSpa(spa =>

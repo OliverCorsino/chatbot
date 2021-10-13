@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthRequest } from './../models/auth-request';
 import { SignUpRequest } from './../models/sign-up-request';
+import { User } from './../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class AuthService {
 
   isAuthenticated() {
     return localStorage.getItem('token') !== null && !this.jwtHelper.isTokenExpired(localStorage.getItem('token'));
+  }
+
+  getCurrentUser() {
+    return this.jwtHelper.decodeToken(localStorage.getItem('token')) as User;
   }
 }
